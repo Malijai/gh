@@ -1,0 +1,14 @@
+{% load formulairesgh %}
+{% with type=typequest|stringformat:"s" %}
+{% autoescape off %}<td class=" {{ classe }} " width = "75%">{{ textequest }}</td><td class=" {{ classe }} " width = "20%">
+{% if type == "STRING" or type == "NUMBER" or type == "CODESTRING" %}
+    {% gh_creetextechar questid type %}</td>
+{% elif type == "DATE" or type == "CODEDATE" or type == "DATEH" %}
+    {% gh_creedate questid type %}</td>
+{% elif type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+    {% gh_creedichou questid type %}</td>
+{% else %}
+    <td class=" {{ classe }} " width = "75%">{{ textequest }} -- {{ type }}</td>
+{% endif %}
+{% endautoescape %}
+{% endwith %}

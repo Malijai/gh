@@ -1,0 +1,37 @@
+{% load spsslistevaleurs %}
+  * Structure du fichier de donnees./ Data structure
+  * Note: change the following line according to the place od data files.
+  GET DATA
+  /TYPE=TXT /FILE='/home/PATH/Datas_00_xx_date.csv'
+  /DELCASE=LINE  /DELIMITERS="\t" /ARRANGEMENT=DELIMITED
+  /FIRSTCASE=2
+  /IMPORTCASE=ALL
+  /VARIABLES=
+personne_ID    F10.0
+AssistantID    F3.0
+Entrevue_ID    F3.0
+Questionnaire    F3.0
+{% for question in questions %}{{ question.varname }}       {{ question.typequestion.taille }}
+{% endfor %}.
+   DATASET NAME DataSet2 WINDOW=FRONT.
+ * Libelle des variables - Variable labels.
+  VARIABLE LABELS
+personne_ID     "Unique ID through provinces"
+AssistantID     "Assistant ID who has completed the interview or questionnaire"
+Entrevue_ID     "Baseline or followup interview"
+Questionnaire   "Questionnaire part"
+{% for question in questions %}{{question.varname}}       "{{question.questionen}}"
+{% endfor %}.
+* Multiple choice labels - Libelle des choix multiples.
+{% autoescape off %}
+{% spaceless %}
+VALUE LABELS
+AssistantID
+{% fait_ras users 'spss' %}
+{% endspaceless %}
+{% endautoescape %}
+{% for question in questions %}
+{% spaceless %}
+{% include "gh_spss_snippet.txt" with typequest=question.typequestion questid=question.id varname=question.varname %}
+{% endspaceless %}
+{% endfor %}

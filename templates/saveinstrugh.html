@@ -1,0 +1,53 @@
+{% extends 'gh_base.html' %}
+{% load i18n %}
+{% load static %}
+{% load formulairesgh %}
+
+{% block content %}
+<h2> {{ code }} - {{ questionnaire }} - {{ interview }}</h2>
+{% csrf_token %}
+   <input name="pid" type="hidden" value="{{ pid }}" />
+   <input name="qid" type="hidden" value="{{ qid }}" />
+   <input name="intid" type="hidden" value="{{ intid }}" />
+
+   <p class="termine">{% include "gh_snippet.html" with typequest=questionfin.typequestion textequest=questionfin.questionen questid=questionfin.id persid=pid province=user.profile.province varname=questionfin.varname intid=intid %}</p>
+   <div class="tabber">
+    {% for instrument in instruments %}
+        {% if forloop.counter > 1 %}
+        </table></div>
+        {% endif %}
+        <div class="tabbertab"><h3>{{ instrument.nom.questionen|slice:"0:15" }}</h3><b>{{ instrument.nom }}</b>
+        <table>
+        <tr><td></td><td></td><td></td></tr>
+        {% for question in instrument.iteminstrument_set.all|dictsort:"question.questionno" %}
+           {% if question.question.phase != "0" %}
+
+            {% if question.questionitem_set.all.exists %}
+                <tr class="{% cycle 'Q1' 'Q2' %}"><td class="{% cycle 'Q1' 'Q2' %}"><a href="javascript:basculer({{question.question.id }}, 10000, 10);"><b>Data</b></a></td>
+            {% else %}
+                <tr class="{% cycle 'Q1' 'Q2' %}"><td class="{% cycle 'Q1' 'Q2' %}"></td>
+            {% endif %}
+                 {% include "gh_snippet.html" with typequest=question.question.typequestion textequest=question.question.questionen questid=question.question.id persid=pid province=user.profile.province varname=question.question.varname intid=intid %}
+                 {% include "aidegh_snippet.html" with aide=question.question.aideen %}
+
+             </tr>
+            {% endif %}
+            <tr><td colspan=4 >
+            <table class="fille" id="A10_{{ question.question.id }}" style="display: none;">
+            {% for liee in question.questionitem_set.all %}
+                <tr class="fille"><td class="fille">
+                    {% include "gh_lieesnippet.html" with typequest=liee.question.typequestion textequest=liee.question.questionen questid=liee.question.id persid=pid province=user.profile.province intid=intid %}
+                </td></tr>
+            {% endfor %}
+
+             </table>
+            </td></tr>
+
+        {% endfor %}
+    {% endfor %}
+</table>
+
+</div><!--Fermeture de la boite à onglets-->
+{% endblock content %}
+
+

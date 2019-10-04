@@ -1,0 +1,30 @@
+{% extends 'gh_base.html' %}
+{% load i18n %}
+{% load static %}
+{% load formulairesgh %}
+
+{% block content %}
+<h2>New file creation: 
+Be carefull all these data will not be accessible after saving</h2>
+{% csrf_token %}
+   <div class="tabber">
+    {% for question in questions %}
+        {% if question.typequestion.nom == 'TITLE' %}
+            {% if forloop.counter > 1 %}
+                </table></div>
+            {% endif %}
+                 <div class="tabbertab"><h3>{{ question.questionen|slice:"0:15" }}</h3><b>{{ question.questionen}}</b>
+                 <table><tr><td></td><td></td><td></td></tr>
+        {% else %}
+            <tr class="{% cycle 'Q1' 'Q2' %}">
+                {% include "gh_snippetcreate.html" with typequest=question.typequestion textequest=question.questionen questid=question.id province=user.profile.province varname=question.varname %}
+                {% include "aidegh_snippet.html" with aide=question.aideen %}
+            </tr>
+
+        {% endif %}
+    {% endfor %}
+</table>
+
+</div><!--Fermeture de la boite à onglets-->
+{% endblock content %}
+

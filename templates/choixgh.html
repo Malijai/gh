@@ -1,0 +1,156 @@
+{% load i18n %}
+{% load static %}
+
+<html>
+    <head>
+        <title>Going Home -  Data entry</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'accueil/w3.css' %}">
+        <link rel="stylesheet" href="{% static 'gh/w3taupe.css' %}">
+        <script type="text/javascript" src="/static/jquery.js"></script>
+        <script type="text/javascript" src="/static/tabber.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/sondageM.css" />
+
+    </head>
+<body class="w3-theme-l4">
+
+<header class="w3-row w3-theme-d3" id="myHeader">
+    <div class="w3-quarter">
+        <a href="{% url 'logout' %}" class="w3-button w3-theme-action"> Logout</a>
+    </div>
+
+    <div class="w3-half w3-center">
+        <h4>Going Home -  Data entry</h4>
+    </div>
+    <div class="w3-quarter w3-right-align">
+    </div>
+</header>
+<div class="principal">
+
+{% if messages %}
+    {% for msg in messages %}
+        <div class="alert alert-{{msg.level_tag}}" role="alert">
+        {{msg.message}}
+        </div>
+    {% endfor %}
+{% endif %}
+<h2>{{ user.first_name }} {{ user.last_name }} </h2>
+
+   <div class="tabber">
+       <div class="tabbertab">
+           <form method="post" action="">
+               {% csrf_token %}
+               <h3>File creation</h3><b>To create a new file you need to have these infos:</b>
+                <p>
+                   <ul>
+                   <li>Name and first name</li>
+                   <li>date of verdict</li>
+                   <li>date of release from hospital</li>
+                   <li>date of consent</li>
+                    </ul>
+                    </p>
+                   <button type="submit" class="placeboutons" name="Newfile">New File</button></td></tr>
+                </table>
+            </form>
+       </div>
+       <div class="tabbertab">
+           <form method="post" action="">
+           {% csrf_token %}
+           <h3>Already created file</h3><b>For already created files</b>
+               <p>To continue an evaluation once the file is already created</p>
+               <table>
+                <tr><td></td><td></td></tr>
+                <tr><td>Personne</td><td><select name="personneid" >
+                    <option value="">Select a case</option>
+                    {% for personne in personnes %}
+                    <option value="{{personne.id }}">{{ personne.personne_code }}</option>
+                    {% endfor %}
+                    </select></td></tr>
+                <tr><td>Interview</td><td><select name="interviewid" >
+                    <option value="">Select an interview</option>
+                    {% for interview in interviews %}
+                    <option value="{{interview.id }}">{{ interview.reponse_en }}</option>
+                    {% endfor %}
+                    </select></td></tr>
+                <tr><td>Infos from clinical file (baseline only)</td><td><button type="submit" class="placeboutons" name="Clinical File">Clinical File</button></td></tr>
+                <tr><td>Socio demo, Relationship, Work Finances, Family friends</td><td><button type="submit" class="placeboutons" name="Interview Guide 1">Interview Guide 1</button></td></tr>
+                <tr><td>Antisocial, Alcohol, Drugs, Treatments' Stress, Leisure, Goals</td><td><button type="submit" class="placeboutons" name="Interview Guide 2">Interview Guide 2</button></td></tr>
+                <tr><td>Baseline VRAG, SCID Alcohol/Drug, SCID APD; All interviews HCR-20-V3, START</td><td><button type="submit" class="placeboutons" name="Instruments">Instruments</button></td></tr>
+                <tr><td>All interviews RAS, CSI, General Impression; Followup only: SOS</td><td><button type="submit" class="placeboutons" name="Scales">Scales</button></td></tr>
+                <tr><td>Sensible data (FPS, DOB ...) which will be encrypted</td><td><button type="submit" class="placeboutons" name="Sensible">Sensible data</button></td></tr>
+                <tr><td>To see saved data in tabular form</td><td><button type="submit" class="placeboutons" name="PrintFile">Export case to csv</button></td></tr>
+               </table>
+           </form>
+       </div>
+       <div class="tabbertab">
+        <h3>TLBF Work Housing FUI</h3>
+            <form method="post" action="">
+                {% csrf_token %}
+               <table>
+                <tr><td></td><td></td></tr>
+                <tr><td>Personne</td><td><select name="personneid" >
+                    <option value="">Select a case</option>
+                    {% for personne in personnes %}
+                    <option value="{{personne.id }}">{{ personne.personne_code }}</option>
+                    {% endfor %}
+                    </select></td></tr>
+                <tr><td>Interview</td><td><select name="interviewid" >
+                    <option value="">Select an interview</option>
+                    {% for interview in interviews %} {% if interview.id > 1 %}
+                        <option value="{{ interview.id }}">{{ interview.reponse_en }}</option>
+                    {% endif %}{% endfor %}
+                    </select></td></tr>
+                 <tr><td>Work TLFB - Follow up interviews only</td><td><button type="submit" class="placeboutons" name="WorkTLBF">Work TLBF</button></td></tr>
+                 <tr><td>Housing TLFB - Follow up interviews only</td><td><button type="submit" class="placeboutons" name="HousingTLFB">Housing TLFB</button></td></tr>
+               </table>
+            </form>
+       </div>
+       <div class="tabbertab">
+           <form method="post" action="">
+           {% csrf_token %}
+               <h3>To see list of files with the interview dates</h3>
+                <table>
+                <tr><td></td><td></td></tr>
+                <tr><td>Province</td><td><select name="provinceid" >
+                    <option value="">Select a province</option>
+                    {% for p in provinces %}
+                    {% if p.reponse_valeur < 4 %}
+                    <option value="{{p.reponse_valeur }}">{{ p.nom_en }}</option>
+                    {% endif %}
+                    {% endfor %}
+                    </select></td></tr>
+                <tr><td>See list of files with interview date and status</td><td><button type="submit" class="placeboutons" name="Voirliste">See list</button></td></tr>
+                </table>
+           </form>
+       </div>
+       <div class="tabbertab">
+        <h3>To print variable list and dictionnary</h3>
+            <table>
+                <tr class="w3-theme-d1"><td><b>Baseline</b></td><td></td></tr>
+                <tr><td>Infos from clinical file (baseline only)</td><td><a href="{% url 'dogh_questions_pdf' 200 1 %}" class= 'button'><b> >> Clinical file Do pdf</b></a></td></tr>
+                <tr><td>Socio demo, Relationship, Work Finances, Family friends</td><td><a href="{% url 'dogh_questions_pdf' 10 1 %}" class= 'button'><b> >> Interview Guide 1 Do pdf</b></a></td></tr>
+                <tr><td>Antisocial, Alcohol, Drugs, Treatments' Stress, Leisure, Goals</td><td><a href="{% url 'dogh_questions_pdf' 15 1 %}" class= 'button'><b> >> Interview Guide 2 Do pdf</b></a></td></tr>
+                <tr><td>Baseline VRAG, SCID Alcohol/Drug, SCID APD; All interviews HCR-20-V3, START</td><td><a href="{% url 'dogh_questions_pdf' 100 1 %}" class= 'button'><b> >> Instruments Do pdf</b></a></td></tr>
+                <tr><td>All interviews RAS, CSI, General Impression</td><td><a href="{% url 'dogh_questions_pdf' 101 1 %}" class= 'button'><b> >> Scales Do pdf</b></a></td></tr>
+                <tr class="w3-theme-d1"><td><b>Followup</b></td><td></td></tr>
+                <tr><td>Socio demo, Relationship, Work Finances, Family friends</td><td><a href="{% url 'dogh_questions_pdf' 10 2 %}" class= 'button'><b> >> Interview Guide 1 FU Do pdf</b></a></td></tr>
+                <tr><td>Antisocial, Alcohol, Drugs, Treatments' Stress, Leisure, Goals</td><td><a href="{% url 'dogh_questions_pdf' 15 2 %}" class= 'button'><b> >> Interview Guide 2 FU Do pdf</b></a></td></tr>
+                <tr><td>HCR-20-V3, START</td><td><a href="{% url 'dogh_questions_pdf' 100 2 %}" class= 'button'><b> >> Instruments FU Do pdf</b></a></td></tr>
+                <tr><td>RAS, CSI, General Impression; Followup only: SOS</td><td><a href="{% url 'dogh_questions_pdf' 101 2 %}" class= 'button'><b> >> Scales FU Do pdf</b></a></td></tr>
+                <tr><td>Work TLFB</td><td><a href="{% url 'dogh_questions_pdf' 4 2 %}" class= 'button'><b> >> Work (one card for each job) Do pdf</b></a></td></tr>
+                <tr><td>Housing TLFB</td><td><a href="{% url 'dogh_questions_pdf' 3 2 %}" class= 'button'><b> >> Housing (one card for each address) Do pdf</b></a></td></tr>
+                <tr class="w3-theme-d1"><td><b>Family</b></td><td></td></tr>
+                <tr><td>Family interview Baseline</td><td><a href="{% url 'dogh_questions_pdf' 600 1 %}" class= 'button'><b> >> Family Baseline Do pdf</b></a></td></tr>
+                <tr><td>Family Interview Follow Up</td><td><a href="{% url 'dogh_questions_pdf' 600 2 %}" class= 'button'><b> >> Family Follow Up Do pdf</b></a></td></tr>
+            </table>
+        </div>
+   </div>
+</div>
+<footer class="w3-container w3-theme-d5 footerw3">
+    <h5><a class="w3-text-white" href="mailto:malijai.caulet.ippm@ssss.gouv.qc.ca?subject=Going Home troubles">For any question or problem : contact</a></h5>
+</footer>
+
+</body>
+</html>
+

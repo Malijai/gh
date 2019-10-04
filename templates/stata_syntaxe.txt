@@ -1,0 +1,31 @@
+{% load spsslistevaleurs %}
+
+import delimited PATH_to_Datas.csv, case(preserve) clear
+*insheet using PATH_to_Datas.csv, clear
+label variable personne_ID     "Unique ID through provinces"
+label variable AssistantID     "Assistant ID who has completed the interview or questionnaire"
+label variable Entrevue_ID     "Baseline or followup interview"
+label variable Questionnaire   "Questionnaire part"
+
+{% for question in questions %}
+{% spaceless %}
+label variable {{ question.varname }}      "{{question.questionen|slice:"0:80"}}"
+{% endspaceless %}
+{% endfor %}
+*Listes de valeurs
+{% autoescape off %}
+{% spaceless %}
+label define AssistantIDlist {% fait_ras users 'stata' %}
+{% endspaceless %}
+label values AssistantID AssistantIDlist
+{% for typequestion in typequestions %}
+{% spaceless %}
+{% include "gh_stata_snippet.txt" with typequest=typequestion.typequestion__nom stats="stata" %}
+{% endspaceless %}
+{% endfor %}
+{% for question in questions %}
+{% spaceless %}
+{% include "gh_statalabel_snippet.txt" with typequest=question.typequestion varname=question.varname questid=question.id stats='stata' %}
+{% endspaceless %}
+{% endfor %}
+{% endautoescape %}

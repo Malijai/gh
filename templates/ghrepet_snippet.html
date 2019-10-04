@@ -1,0 +1,16 @@
+{% load formulairesghrepet %}
+{% with type=typequest|stringformat:"s" %}
+    {% autoescape off %}<td class=" {{ classe }} " width = "75%">{{ textequest }}</td><td class=" {{ classe }} " width = "20%">
+    {% if type == "STRING" or type == "CODESTRING" or type == "NUMBER" %}
+        {% ghrep_textechar questid type interview=intid persid=pid parent=parent relation=relation cible=cible uid=user.id ordre=ordre %}</td>
+    {% elif type == "DATE" or type == "CODEDATE" or type == "DATEH" %}
+        {% ghrep_date questid type interview=intid persid=pid parent=parent relation=relation cible=cible uid=user.id ordre=ordre %}</td>
+    {% elif type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+        {% ghrep_dichou questid type interview=intid persid=pid parent=parent relation=relation cible=cible uid=user.id ordre=ordre %}</td>
+    {% elif type == "CATEGORIAL" %}
+        {% ghrep_reponse questid type interview=intid persid=pid parent=parent relation=relation cible=cible uid=user.id ordre=ordre %}</td>
+    {% else %}
+        {{ textequest }} -- {{ type }}</td>
+    {% endif %}
+    {% endautoescape %}
+{% endwith %}

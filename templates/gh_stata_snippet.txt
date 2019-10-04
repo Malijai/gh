@@ -1,0 +1,27 @@
+{% load spsslistevaleurs %}
+{% with type=typequest|stringformat:"s" %}
+{% autoescape off %}
+{% if type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+{% spaceless %}
+label define {{type}}list {% spss_dichou type stats %}
+{% endspaceless %}
+{% elif type == "VICTIME" %}
+{% spaceless %}
+label define {{type}}list {% spss_table_victime stats %}
+{% endspaceless %}
+{% elif type == "PROVINCE"  or type == "PAYS" or type == "LANGUE" or type == "VIOLATION"  or type == "POSOLOGIE" %}
+{% spaceless %}
+label define {{type}}list {% spss_table type stats %}
+{% endspaceless %}
+{% elif type == "HCR20" or type == "START" or type == "RAS" or type == "CSI" or type == "VRAG" or type == "SCID" or type == "SOS"  or type == "HCRREL" %}
+{% spaceless %}
+label define {{type}}list {% spss_table type stats %}
+{% endspaceless %}
+{% elif type ==  "ETABLISSEMENT"  or type ==  "MUNICIPALITE" %}
+{% spaceless %}
+label define {{type}}list {% spss_table_valeurs_prov type stats %}
+{% endspaceless %}
+{% endif %}
+{% endautoescape %}
+{% endwith %}
+

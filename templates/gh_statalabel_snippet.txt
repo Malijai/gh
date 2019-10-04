@@ -1,0 +1,32 @@
+{% load spsslistevaleurs %}
+{% with type=typequest|stringformat:"s" %}
+{% autoescape off %}
+{% if type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+{% spaceless %}
+label values {{varname}} {{type}}list
+{% endspaceless %}
+{% elif type == "VICTIME" %}
+{% spaceless %}
+label values {{varname}} {{type}}list
+{% endspaceless %}
+{% elif type == "PROVINCE"  or type == "PAYS" or type == "LANGUE" or type == "VIOLATION"  or type == "POSOLOGIE" %}
+{% spaceless %}
+label values {{varname}} {{type}}list
+{% endspaceless %}
+{% elif type == "HCR20" or type == "START" or type == "RAS" or type == "CSI" or type == "VRAG" or type == "SCID" or type == "SOS"  or type == "HCRREL" %}
+{% spaceless %}
+label values {{varname}} {{type}}list
+{% endspaceless %}
+{% elif type ==  "ETABLISSEMENT"  or type ==  "MUNICIPALITE" %}
+{% spaceless %}
+label values {{varname}} {{type}}list
+{% endspaceless %}
+{% elif type == "CATEGORIAL" %}
+{% spaceless %}
+label define {{varname}}list {% spss_reponse questid stats %}
+label values {{varname}} {{varname}}list
+{% endspaceless %}
+{% endif %}
+{% endautoescape %}
+{% endwith %}
+

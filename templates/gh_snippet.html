@@ -1,0 +1,30 @@
+{% load formulairesgh %}
+{% with type=typequest|stringformat:"s" %}
+{% autoescape off %}<td class=" {{ classe }} " width = "75%">{{ textequest }}</td><td class=" {{ classe }} " width = "20%">
+{% if type == "STRING" or type == "NUMBER" %}
+    {% gh_textechar questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type == "CODESTRING" %}
+    {% gh_codetexte questid type persid=persid relation=relation cible=cible uid=user.id varname=varname intid=intid %}</td>
+{% elif type == "DATE" or type == "DATEH" %}
+    {% gh_date questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type == "CODEDATE" %}
+    {% gh_datecode questid type persid=persid relation=relation cible=cible uid=user.id varname=varname intid=intid %}</td>
+{% elif type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+    {% gh_dichou questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type == "CATEGORIAL" %}
+    {% gh_reponse questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type == "VICTIME" %}
+    {% gh_table_victime questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type == "PROVINCE"  or type == "PAYS" or type == "LANGUE" or type == "VIOLATION"  or type == "POSOLOGIE" %}
+    {% gh_table questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type == "HCR20" or type == "START" or type == "RAS" or type == "CSI" or type == "VRAG" or type == "SCID" or type == "SOS"  or type == "HCRREL" %}
+    {% gh_table questid type persid=persid relation=relation cible=cible uid=user.id intid=intid %}</td>
+{% elif type ==  "ETABLISSEMENT"  or type ==  "MUNICIPALITE" %}
+    {% gh_table_valeurs_prov questid type persid=persid relation=relation cible=cible province=user.profile.province uid=user.id intid=intid %}</td>
+{% elif type ==  "LISTEHCR" or type ==  "LISTE" %}
+    {% gh_check questid type persid=persid relation=relation cible=cible province=user.profile.province uid=user.id intid=intid %}</td>
+{% else %}
+    <td class="termine" width = "75%">{{ textequest }} -- {{ type }}</td>
+{% endif %}
+{% endautoescape %}
+{% endwith %}

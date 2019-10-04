@@ -1,0 +1,113 @@
+{% extends 'ghrepet_base.html' %}
+{% load i18n %}
+{% load static %}
+{% load formulairesghrepet %}
+
+{% block content %}
+{% if qid == 4 %}
+    <h2> {{ code }} -  With {{ compte }} different jobs for this interview  - {{ interview }}</h2>
+{% else %}
+    <h2> {{ code }} -  With {{ compte }} different housing for this interview  - {{ interview }}</h2>
+{% endif %}
+
+    {% csrf_token %}
+    <input name="pid" type="hidden" value="{{ pid }}" />
+    <input name="qid" type="hidden" value="{{ qid }}" />
+    <input name="intid" type="hidden" value="{{ intid }}" />
+
+    <div class="tabber">
+        {% for x in fiches %}
+            {% if forloop.first %}
+                <div class="tabbertab">{% include "dateghrepet_snippet.html" %}
+                <button type="submit" class="btn-default" name="remove_{{ x }}" >Remove the current card # {{ x }}</button>
+                <div class="tabber">
+            {% else %}
+                </div>
+                <div class="tabbertab">{% include "dateghrepet_snippet.html" %}
+                <button type="submit" class="btn-default" name="remove_{{ x }}" >Remove the current card # {{ x }}</button>
+                <div class="tabber">
+            {% endif %}
+            {% for question in questions %}
+                {% if question.typequestion.nom == 'TITLE' %}
+                    {% if forloop.counter > 1 %}
+                        </table></div>
+                    {% endif %}
+                        <div class="tabbertab"><h3>{{ question.questionen|slice:"0:15" }}</h3><b>{{ question.questionen}}</b>
+                        <table><tr><td></td><td></td><td></td></tr>
+                {% elif question.typequestion.nom == 'COMMENT' %}
+                    <tr><td class="plusdeux" colspan="3">{{ question.questionen }}<td></tr>
+                {% else %}
+                    {% if question.id not in ascendancesF and question.id not in ascendancesM %}
+                        <tr class="{% cycle 'Q1' 'Q2' %}">
+                         {% include "ghrepet_snippet.html" with typequest=question.typequestion textequest=question.questionen questid=question.id ordre=x %}
+                         {% include "aide_snippet.html" with aide=question.aideen %}
+                        </tr>
+                    {% elif question.id in ascendancesF and question.id in ascendancesM %}
+                         {% for enfant in question.question_set.all %}
+                            {% if forloop.counter == 1 %}
+                            <tr style="display: none;" class="child-row-{{question.parent_id}}{{question.relation}}{{question.cible}}">
+                                {% include "ghrepet_snippet.html" with typequest=question.typequestion textequest=question.questionen questid=question.id relation=enfant.relation cible=enfant.cible classe="fillemere" ordre=x %}
+                                {% include "aide_snippet.html" with aide=question.aideen classe="fillemere" %}
+                            </tr>
+                            {% endif %}
+                         {% endfor %}
+                    {% elif question.id in ascendancesM and question.id not in ascendancesF %}
+                            <tr class="mere">
+                        {% for enfant in question.question_set.all %}
+                            {% if forloop.counter == 1 %}
+                                {% include "ghrepet_snippet.html" with typequest=question.typequestion textequest=question.questionen questid=question.id relation=enfant.relation cible=enfant.cible classe="mere" ordre=x %}
+                                {% include "aide_snippet.html" with aide=question.aideen %}
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% for enfant in question.question_set.all %}
+                        {% if enfant.id not in ascendancesM %}
+                             <tr style="display: none;" class="child-row-{{enfant.parent_id}}{{enfant.relation}}{{enfant.cible}}">
+                                 {% include "ghrepet_snippet.html" with typequest=enfant.typequestion textequest=enfant.questionen questid=enfant.id classe="fille" ordre=x %}
+                                 {% include "aide_snippet.html" with aide=enfant.aideen classe="fille" %}
+                             </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+             {% endfor %}
+             </table>
+             </div>
+                 <div class="placeboutons">
+                     <button type="submit" class="btn-default" name="current_{{ x }}" >Save current card # {{ x }}</button>
+                     <button type="submit" class="btn-default" name="add_{{ x }}" >Save current card and add one</button>
+                     <a href="{% url 'SelectDossier' %}">Return to questionnaire choice</a>
+                 </div>
+             </div>
+         {% endfor %}
+
+   </div><!--Fermeture de la boite à onglets-->
+
+{% endblock content %}
+
+{% block pagination %}
+
+<div class="pagination">
+
+{% if fiches.has_other_pages %}
+    {% if fiches.has_previous %}
+      <a href="?page={{ fiches.previous_page_number }}">&laquo;</a>
+    {% else %}
+       <a href="#" >&laquo;</a>
+    {% endif %}
+    {% for i in fiches.paginator.page_range %}
+      {% if fiches.number == i %}
+       <a href="#" class="active"(current)>{{ i }}</a>
+      {% else %}
+        <a href="?page={{ i }}">{{ i }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if fiches.has_next %}
+      <a href="?page={{ fiches.next_page_number }}">&raquo;</a>
+    {% else %}
+       <a href="#" >&raquo;</a>
+    {% endif %}
+{% endif %}
+</div>
+
+{% endblock pagination %}

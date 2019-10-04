@@ -1,0 +1,61 @@
+{% extends 'gh_base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<h2>listes</h2>
+   <div class="tabber">
+
+   <table border="1">
+{% for items in lignes %}
+    {% if forloop.first %}
+          <tr class="w3-theme-d3" >
+               <th>{{ items.0 }} </th>
+               <th>{{ items.1 }} </th>
+               <th>{{ items.2 }} </th>
+               <th>{{ items.3 }} </th>
+               <th>{{ items.4 }} </th>
+               <th>{{ items.5 }} </th>
+               <th>{{ items.6 }} </th>
+        </tr>
+    {% else %}
+        <tr class="{% cycle 'w3-theme-l5' 'w3-theme-l4' %}">
+               <td>{{ items.0 }} </td>
+               <td>{{ items.1 }} </td>
+               <td>
+               {% if items.2|length > 5 %}
+                   <b>Completed</b>
+               {% else %}
+                   {% for statut in items.2 %}
+                       {{ statut|safe }}  <br>
+                   {% endfor %}
+               {% endif %}
+              </td>
+              <td>{{ items.3 }} </td>
+              <td>
+               {% if items.4|length > 3 %}
+                   <b>Completed</b>
+               {% else %}
+                   {% for statut in items.4 %}
+                       {{ statut|safe }}  <br>
+                   {% endfor %}
+               {% endif %}
+              </td>
+              <td>{{ items.5 }} </td>
+              <td>
+               {% if items.6|length > 3 %}
+                   <b>Completed</b>
+               {% else %}
+                   {% for statut in items.6 %}
+                       {{ statut|safe }}  <br>
+                   {% endfor %}
+               {% endif %}
+              </td>
+         </tr>
+    {% endif %}
+{% endfor %}
+    </table>
+
+</div><!--Fermeture de la boite à onglets-->
+{% endblock content %}
+

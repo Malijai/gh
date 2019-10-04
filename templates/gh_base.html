@@ -1,0 +1,204 @@
+{% load i18n %}
+{% load static %}
+<html>
+   <head>
+         <title>Questions etc</title>
+         <!--<link rel="stylesheet" href="{% static 'blog/style_b.css' %}">-->
+         <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+         <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'gh/w3taupe.css' %}"/>
+
+         <!--<script type="text/javascript" src="/static/admin/js/core.js"></script>-->
+         <!--<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>-->
+         <!--<script type="text/javascript" src="/admin/jsi18n/"></script>-->
+
+        <script type="text/javascript" src="{% static 'gh/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'gh/tabber.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'gh/sondageGH.css' %}"/>
+
+
+<script type="text/javascript" >
+$(function() {
+	$("input[@id^=row-]").click(function(){
+		var reg = new RegExp("X", "");
+		res = this.id.split(reg);
+		var cond=res[3];
+		var valeurcible=res[2];
+		var relation=res[1];
+		var enfant=res[0];
+		var valeurcible2;
+		var courant=$(this).val();
+
+		if(valeurcible=="vide"){
+			valeurcible2="";
+		}else{
+			valeurcible2= valeurcible;
+			valeurcible=parseInt(valeurcible, 10);
+			courant=parseInt(courant, 10);
+			valeurcible2=parseInt(valeurcible2, 10);
+			}
+		if (relation=='eq'){
+			if(courant == valeurcible2) {
+					$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+					$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}else if(relation=='inf'){
+			if(courant < valeurcible2) {
+					$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+					$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}else if(relation=='sup'){
+			if(courant > valeurcible2) {
+					$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+					$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}else if(relation == 'diff'){
+			if(courant != valeurcible2) {
+					$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+					 $('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}
+	});
+});
+</script>
+
+<script type="text/javascript" >
+$(function() {
+$("select[@id^=row-]").click(function(){
+
+	var reg = new RegExp("X", "");
+	res = this.id.split(reg);
+	var valeurcible=res[2];
+	var relation=res[1];
+	var enfant=res[0];
+	var courant=$(this).val();
+
+	if(valeurcible=="vide"){
+			valeurcibl2="";
+	}
+valeurcible=parseInt(valeurcible, 10);
+courant=parseInt(courant, 10);
+
+	if (relation=='eq'){
+		if(courant == valeurcible) {
+			$('.child-'+enfant+relation+valeurcible).show();
+		}else{
+			$('.child-'+enfant+relation+valeurcible).hide();
+		}
+		}else if(relation =='inf'){
+			if(courant < valeurcible) {
+					$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+					$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}else if(relation == 'sup'){
+			if(courant > valeurcible) {
+					$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+					$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}else{
+			if(courant != valeurcible){
+				$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+				$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}
+	});
+});
+</script>
+
+
+<script type="text/javascript" >
+$(function() {
+	$("TextArea[@id^=row-]").blur(function(){
+		var reg = new RegExp("X", "");
+		res = this.id.split(reg);
+		var cond=res[3];
+		var valeurcible=res[2];
+		var relation=res[1];
+		var enfant=res[0];
+		var valeurcible2;
+		if(valeurcible=="vide"){
+			valeurcible2="";
+		}else{
+			valeurcible2= valeurcible;
+			}
+		if (relation=='eq'){
+			if($(this).val() == valeurcible2) {
+				$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+				$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}else{
+			if($(this).val() != valeurcible2){
+				$('.child-'+enfant+relation+valeurcible).show();
+			}else{
+				$('.child-'+enfant+relation+valeurcible).hide();
+			}
+		}
+	});
+});
+</script>
+<script language="JavaScript" type="text/javascript">
+<!--
+function basculer(item, nb_item,niveau) {
+   for (i = 0; i < nb_item; i++) {
+      id_cible = "A" +niveau +"_" + i;
+      cible = document.getElementById(id_cible);
+	  if(cible != null){
+		  if (i == item) {
+			  if (cible.style.display == "none"){
+				  cible.style.display="";
+				  //Ouvre le courant
+			  } else {
+				  cible.style.display="none";
+				  //referme le courant
+			  }
+		  }else{
+			  cible.style.display="none";
+			  // Referme les autres
+		  }
+	  }
+   }
+}
+//-->
+</script>
+
+</head>
+    <body>
+    <form action="" method="post">
+        <div id="container">
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="alert alert-{{msg.level_tag}}" role="alert">
+                    {{msg.message}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="footer">
+         <table>
+            <tr>
+                <td class="pagination"><a href="{% url 'SelectDossier' %}">Return to questionnaire choice</a></td>
+                <td><button type="submit" class="btn-default">Save</button></td>
+                <td class="pagination"><a href="{% url 'Rechercherviol' %}" target="Codes Violation/CC" onclick="window.open('', 'Codes Violation/CC', 'width=700,height=250,status=yes,resizable=yes,scrollbars=no,toolbar=no')"  >Violation code finder</a></td>
+            </tr>
+        </table>
+    </div>
+
+    </form>
+
+    </body>
+</html>
+

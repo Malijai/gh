@@ -1,0 +1,49 @@
+{% load spsslistevaleurs %}
+{% with type=typequest|stringformat:"s" %}
+{% autoescape off %}
+{% if type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_dichou type 'spss' %}
+{% endspaceless %}
+{% elif type == "CATEGORIAL" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_reponse questid 'spss' %}
+{% endspaceless %}
+{% elif type == "VICTIME" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_table_victime 'spss' %}
+{% endspaceless %}
+{% elif type == "PROVINCE"  or type == "PAYS" or type == "LANGUE" or type == "VIOLATION"  or type == "POSOLOGIE" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_table type 'spss' %}
+{% endspaceless %}
+{% elif type == "HCR20" or type == "START" or type == "RAS" or type == "CSI" or type == "VRAG" or type == "SCID" or type == "SOS"  or type == "HCRREL" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_table type 'spss' %}
+{% endspaceless %}
+{% elif type ==  "ETABLISSEMENT"  or type ==  "MUNICIPALITE" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_table_valeurs_prov type 'spss' %}
+{% endspaceless %}
+{% elif type ==  "LISTEHCR" or type ==  "LISTE" %}
+VALUE LABELS
+{% spaceless %}
+{{ varname }}
+{% spss_check type 'spss' %}
+{% endspaceless %}
+{% endif %}
+{% endautoescape %}
+{% endwith %}
+

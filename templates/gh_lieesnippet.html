@@ -1,0 +1,20 @@
+{% load formulairesgh %}
+{% with type=typequest|stringformat:"s" %}
+{% autoescape off %}<td class="fille" width = "75%">{{ textequest }}</td><td class="fille" width = "20%">
+{% if type == "STRING" or type == "NUMBER" or type == "DATE" %}
+    {% gh_lieetxt questid type persid=persid uid=user.id intid=intid %}</td>
+{% elif type == "BOOLEAN" or type == "DICHO" or type == "DICHOU" or type == "DICHON" %}
+    {% gh_lieedichou questid type persid=persid uid=user.id intid=intid %}</td>
+{% elif type == "CATEGORIAL" %}
+    {% gh_lieereponse questid type persid=persid uid=user.id intid=intid %}</td>
+{% elif  type == "VICTIME" or type == "HCR20" or type == "START" or type == "RAS" or type == "CSI" or type == "VRAG" or type == "SCID" or type == "SOS"  or type == "HCRREL" %}
+    {% gh_lieereponse questid type persid=persid uid=user.id intid=intid %}</td>
+{% elif type == "PROVINCE"  or type == "PAYS" or type == "LANGUE" or type == "VIOLATION"  or type == "POSOLOGIE" %}
+    {% gh_lieereponse questid type persid=persid uid=user.id intid=intid %}</td>
+{% elif type ==  "ETABLISSEMENT"  or type ==  "MUNICIPALITE" %}
+    {% gh_liee_prov questid type persid=persid province=user.profile.province uid=user.id intid=intid %}</td>
+{% else %}
+    <td class="termine" width = "75%">{{ textequest }} -- {{ type }}</td>
+{% endif %}
+{% endautoescape %}
+{% endwith %}
